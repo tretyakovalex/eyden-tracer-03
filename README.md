@@ -7,7 +7,7 @@ Until now we have only hardcoded our scene descriptions in main.cpp. This is of 
 3. Implement the missing parts of the ParseOBJ-method.
 Test your implementation with cow.obj. If your obj-importer works as expected you should see an image of a cow like this:
 
-![]()
+![Cow](./doc/cow.jpg)
 
 **Hint:** The obj file-format can be dumped out from various 3d-modelers. Nevertheless, the output might differ from modeler to modeler and there are also other tokens like _vn_ for vertex normals or _vt_ for texture coordinates. Check
 [obj file format](https://www.cs.cmu.edu/~mbz/personal/graphics/obj.html) for a full description. 
