@@ -1,6 +1,8 @@
 #pragma once
 
-#include "ray.h"
+#include "types.h"
+
+struct Ray;
 
 namespace {
 	inline Vec3f Min3f(const Vec3f a, const Vec3f b)

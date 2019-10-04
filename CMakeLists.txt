@@ -15,7 +15,7 @@ source_group("Source Files\\camera" FILES "src/ICamera.h" "src/CameraPerspective
 source_group("Source Files\\lights" FILES "src/ILight.h" "src/LightPoint.h" "src/LightArea.h")
 source_group("Source Files\\primitives" FILES "src/Prim.h" "src/PrimSphere.h" "src/PrimPlane.h" "src/PrimTriangle.h")
 source_group("Source Files\\shaders" FILES "src/IShader.h" "src/ShaderFlat.h" "src/ShaderEyelight.h" "src/ShaderPhong.h")
-source_group("Source Files\\scene" FILES "src/Scene.h")
+source_group("Source Files\\scene" FILES "src/Scene.h" "src/Scene.cpp")
 source_group("Source Files\\utilities" FILES "src/ray.h" "src/random.h")
 source_group("Source Files\\utilities\\BSP Tree" FILES "src/BSPNode.h" "src/BSPTree.h" "src/BoundingBox.h")
 
@@ -39,8 +39,12 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
 # Properties -> C/C++ -> General -> Additional Include Directories
 include_directories(${PROJECT_SOURCE_DIR}/include ${OpenCV_INCLUDE_DIRS})
 
-#definitions
+# Definitions
 add_definitions(-D_CRT_SECURE_NO_WARNINGS -D_SCL_SECURE_NO_WARNINGS)
+
+# Options
+include(CMakeDependentOption)
+option(ENABLE_BSP "Use Binary Space Partitioning (BSP) Tree for optimized ray traversal" ON)
 
 add_executable(eyden-tracer ${INCLUDE} ${SOURCES} ${HEADERS})
 
