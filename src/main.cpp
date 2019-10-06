@@ -12,6 +12,7 @@
 
 #include "LightPoint.h"
 #include "LightArea.h"
+#include "timer.h"
 
 Mat RenderFrame(void)
 {
@@ -48,7 +49,9 @@ Mat RenderFrame(void)
 
 int main(int argc, char* argv[])
 {
+	DirectGraphicalModels::Timer::start("Rebdering frame... ");
 	Mat img = RenderFrame();
+	DirectGraphicalModels::Timer::stop();
 	imshow("Image", img);
 	waitKey();
 	imwrite("cow.jpg", img);
