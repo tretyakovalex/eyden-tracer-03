@@ -53,14 +53,23 @@ public:
 		if (ray.t <= f || f <  Epsilon  ) return false;
 		
 		ray.t = f;
-		
+		ray.hit = this;
 		return true;
 	}
 
 	virtual Vec3f GetNormal(const Ray& ray) const override
 	{
+		const Vec3f edge1 = m_b - m_a;
+		const Vec3f edge2 = m_c - m_a;
+		Vec3f normal = normalize(edge1.cross(edge2));
+		return normal;
+	}
+	
+	virtual CBoundingBox calcBounds(void) const override
+	{
+		CBoundingBox res;
 		// --- PUT YOUR CODE HERE ---
-		return Vec3f();
+		return res;
 	}
 	
 private:

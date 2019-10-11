@@ -17,11 +17,9 @@ public:
 	 */
 	CPrimPlane(Vec3f origin, Vec3f normal, std::shared_ptr<IShader> pShader)
 		: CPrim(pShader)
-		, m_normal(normal)
+		, m_normal(normalize(normal))
 		, m_origin(origin)
-	{
-		normalize(m_normal);
-	}
+	{}
 	virtual ~CPrimPlane(void) = default;
 
 	virtual bool Intersect(Ray& ray) override
@@ -29,13 +27,17 @@ public:
 		float t = (m_origin - ray.org).dot(m_normal) / ray.dir.dot(m_normal);
 		if (t < Epsilon || t > ray.t) return false;
 		ray.t = t;
+		ray.hit = this;
 		return true;
 	}
 	
-	virtual Vec3f GetNormal(const Ray& ray) const override
+	virtual Vec3f GetNormal(const Ray& ray) const override { return m_normal; }
+	
+	virtual CBoundingBox calcBounds(void) const override
 	{
+		CBoundingBox bounds;
 		// --- PUT YOUR CODE HERE ---
-		return Vec3f();
+		return bounds;
 	}
 	
 private:

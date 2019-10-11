@@ -21,8 +21,17 @@ public:
 
 	virtual std::optional<Vec3f> Illuminate(Ray& ray) override
 	{
-		// --- PUT YOUR CODE HERE ---
-		return Vec3f();
+		// ray towards point light position
+		ray.dir = m_position - ray.org;
+		ray.hit = NULL;
+		ray.t   = norm(ray.dir) - Epsilon; // maximal ray length
+		ray.dir = normalize(ray.dir);
+	
+		// return attenuated intensity
+		float attenuation = 1.0f / ray.t;
+		//float attenuation = 1.0f / (ray.t * ray.t);
+		//float attenuation = 1.0f / (0.5f * ray.t + 1.0f); // linear attenuation
+		return attenuation * m_intensity;
 	}
 
 

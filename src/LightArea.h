@@ -25,13 +25,25 @@ public:
 		, m_e1(p1 - p0)
 		, m_e2(p3 - p0)
 	{ 
-		// --- PUT YOUR CODE HERE ---
+		m_normal = m_e1.cross(m_e2);
+		m_area = norm(m_normal);
+		m_normal = normalize(m_normal);
 	}  
 
 	virtual std::optional<Vec3f> Illuminate(Ray& ray) override
 	{
-		// --- PUT YOUR CODE HERE ---
-		return Vec3f();
+		float xi1 = DirectGraphicalModels::random::U<float>();
+		float xi2 = DirectGraphicalModels::random::U<float>();
+
+		Vec3f pos = m_p0 + xi1 * m_e1 + xi2 * m_e2;
+		ray.dir = pos - ray.org;
+		float dist = norm(ray.dir);
+		float cosN = -ray.dir.dot(m_normal) / dist;
+		if (cosN <= 0.0f) return std::nullopt;
+		Vec3f res = (m_area * cosN / (dist * dist)) * m_intensity;
+		ray.dir = normalize(ray.dir);
+		ray.t = dist;
+		return res;
 	}
 
 	Vec3f GetNormal(const Vec3f& position) const { return m_normal; }

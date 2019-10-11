@@ -50,13 +50,23 @@ public:
 		}
 		
 		ray.t = dist;
+		ray.hit = this;
 		return true;
 	}
 	
 	virtual Vec3f GetNormal(const Ray& ray) const override
 	{
+		Vec3f hit = ray.org + ray.t * ray.dir;
+		Vec3f normal = hit - m_center;
+		normal = normalize(normal);
+		return normal;
+	}
+
+	virtual CBoundingBox calcBounds(void) const override
+	{
+		CBoundingBox res;
 		// --- PUT YOUR CODE HERE ---
-		return Vec3f();
+		return res;
 	}
 	
 private:
