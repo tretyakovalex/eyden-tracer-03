@@ -5,41 +5,54 @@
 #include "PrimSphere.h"
 #include "PrimPlane.h"
 #include "PrimTriangle.h"
+#include "Solid.h"
 
 #include "ShaderFlat.h"
 #include "ShaderEyelight.h"
 #include "ShaderPhong.h"
 
-#include "LightPoint.h"
-#include "LightArea.h"
+#include "LightOmni.h"
 #include "timer.h"
 
 Mat RenderFrame(void)
 {
+	// Camera resolution
+	const Size resolution(800, 600);
+	
 	// Define a scene
 	CScene scene;
 	
-	// Load scene description
-	scene.ParseOBJ("../../../data/cow.obj");
+	// Add camera to scene
+	scene.add(std::make_shared<CCameraPerspective>(resolution, Vec3f(0, 3.5f, -13), Vec3f(0, 0, 1), Vec3f(0, 1, 0), 60));
 
-#ifdef ENABLE_BSP
-	// Build BSPTree
-	scene.BuildAccelStructure();
+	// Eyelight shader
+	auto pShader = std::make_shared<CShaderEyelight>(Vec3f::all(1));
+
+	// Load scene description
+#ifdef WIN32
+	const std::string dataPath = "../data/";
+#else
+	const std::string dataPath = "../../data/";
 #endif
+	CSolid solid(pShader, dataPath + "Torus Knot.obj");
+	scene.add(solid);
+
+	// Build BSPTree
+	scene.buildAccelStructure(20, 3);
 	
 	Vec3f pointLightIntensity(3, 3, 3);
 	Vec3f lightPosition2(-3, 5, 4);
 	Vec3f lightPosition3(0, 1, 4);
 	
-	scene.Add(std::make_shared<CLightPoint>(pointLightIntensity, lightPosition2));
-	scene.Add(std::make_shared<CLightPoint>(pointLightIntensity, lightPosition3));
+	scene.add(std::make_shared<CLightOmni>(pointLightIntensity, lightPosition2));
+	scene.add(std::make_shared<CLightOmni>(pointLightIntensity, lightPosition3));
 
-	Mat img(scene.m_pCamera->getResolution(), CV_32FC3);		// image array
-	Ray ray;                                          			// primary ray
+	Mat img(resolution, CV_32FC3);	// image array
+	Ray ray;                                          				// primary ray
 
 	for (int y = 0; y < img.rows; y++)
 		for (int x = 0; x < img.cols; x++) {
-			scene.m_pCamera->InitRay(x, y, ray); // initialize ray
+			scene.getActiveCamera()->InitRay(ray, x, y); // initialize ray
 			img.at<Vec3f>(y, x) = scene.RayTrace(ray); 
 		}
 	
@@ -49,11 +62,11 @@ Mat RenderFrame(void)
 
 int main(int argc, char* argv[])
 {
-	DirectGraphicalModels::Timer::start("Rebdering frame... ");
+	DirectGraphicalModels::Timer::start("Rendering frame... ");
 	Mat img = RenderFrame();
 	DirectGraphicalModels::Timer::stop();
 	imshow("Image", img);
 	waitKey();
-	imwrite("cow.jpg", img);
+	imwrite("torus knot.jpg", img);
 	return 0;
 }

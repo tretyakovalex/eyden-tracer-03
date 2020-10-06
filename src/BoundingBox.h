@@ -24,7 +24,10 @@ class CBoundingBox
 public:
 	CBoundingBox(void) = default;
 	~CBoundingBox(void)= default;
-	
+	friend std::ostream& operator<<(std::ostream& os, const CBoundingBox& box) {
+		os << box.m_minPoint << " " << box.m_maxPoint;
+		return os;
+	}
 	/**
 	 * @brief Resets the bounding box
 	 * @details This function resets the member variables \b m_min and \b m_max
@@ -75,6 +78,6 @@ public:
 	
 	
 public:
-	Vec3f m_min;	///< The minimal point defying the size of the bounding box
-	Vec3f m_max;	///< The maximal point defying the size of the bounding box
+	Vec3f m_minPoint;	///< The minimal point defying the size of the bounding box
+	Vec3f m_maxPoint;	///< The maximal point defying the size of the bounding box
 };

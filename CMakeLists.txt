@@ -11,12 +11,13 @@ file(GLOB HEADERS "src/*.h")
 source_group("Include" FILES ${INCLUDE})
 source_group("" FILES ${INCLUDE} ${SOURCES} ${HEADERS}) 
 source_group("Source Files" FILES "src/main.cpp") 
-source_group("Source Files\\camera" FILES "src/ICamera.h" "src/CameraPerspective.h")
-source_group("Source Files\\lights" FILES "src/ILight.h" "src/LightPoint.h" "src/LightArea.h")
-source_group("Source Files\\primitives" FILES "src/Prim.h" "src/PrimSphere.h" "src/PrimPlane.h" "src/PrimTriangle.h")
-source_group("Source Files\\shaders" FILES "src/IShader.h" "src/ShaderFlat.h" "src/ShaderEyelight.h" "src/ShaderPhong.h")
-source_group("Source Files\\scene" FILES "src/Scene.h" "src/Scene.cpp")
-source_group("Source Files\\utilities" FILES "src/ray.h" "src/random.h" "src/timer.h")
+source_group("Source Files\\Cameras" FILES "src/ICamera.h" "src/CameraPerspective.h")
+source_group("Source Files\\Lights" FILES "src/ILight.h" "src/LightOmni.h")
+source_group("Source Files\\Primitives" FILES "src/IPrim.h" "src/PrimSphere.h" "src/PrimPlane.h" "src/PrimTriangle.h")
+source_group("Source Files\\Solids" FILES "src/Solid.h")
+source_group("Source Files\\Shaders" FILES "src/IShader.h" "src/ShaderFlat.h" "src/ShaderEyelight.h" "src/ShaderPhong.h")
+source_group("Source Files\\Scene" FILES "src/Scene.h")
+source_group("Source Files\\utilities" FILES "src/ray.h" "src/timer.h")
 source_group("Source Files\\utilities\\BSP Tree" FILES "src/BSPNode.h" "src/BSPTree.h" "src/BoundingBox.h")
 
 # OpenCV package
@@ -44,7 +45,7 @@ add_definitions(-D_CRT_SECURE_NO_WARNINGS -D_SCL_SECURE_NO_WARNINGS)
 
 # Options
 include(CMakeDependentOption)
-option(ENABLE_BSP "Use Binary Space Partitioning (BSP) Tree for optimized ray traversal" ON)
+option(ENABLE_BSP "Use Binary Space Partitioning (BSP) Tree for optimized ray traversal" OFF)
 
 add_executable(eyden-tracer ${INCLUDE} ${SOURCES} ${HEADERS})
 
