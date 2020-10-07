@@ -1,21 +1,33 @@
 # Practical Assignment 3
-**Name:** .......
-## Problem 3.1
-### OBJ Scene loader (Points 30)
-Until now we have only hardcoded our scene descriptions in main.cpp. This is of course not practical. In the new framework, a method ```CScene::ParseOBJ()``` is added to the class ```CScene```, in order to load a scene-description from an obj-file. To make the method work proceed as follows:
-1. Fork the current repository
-2. Modify the README.md file in your fork and put your name (or names if you work in a group) above.
-3. Have a look at the file cow.obj. Study how triangles are stored in the obj-format. The _v_ ’s indicate a single 3d-vertex position, and the _f_ ’s (faces) are indecies to 3 vertex numbers a triangle consits of (please note that the face indecies are starting with **1 and not 0**).
-4. Implement the missing parts of the ParseOBJ-method.
-Test your implementation with cow.obj. If your obj-importer works as expected you should see an image of a cow like this:
+**Dealine**: 29.10.2020
 
-![Cow](./doc/cow.jpg)
+Please put your name here:  
+**Name:** .......
+## Problem 1
+### Rendering complex geometry (Points 5)
+Until now we have only hardcoded our scene geometry in main.cpp. This is of course not practical. In the new framework, a class ```CSolid``` is added. This class may contain complex geometry formed by multiple primitives. Such geometry may be saved / read from an .obj file. For this problem we will read _torus knot.obj_ file and rended this object, which consists of 12 960 triangles. To make the method work proceed as follows:
+1. Fork the current repository
+2. Modify the README.md file in your fork and put your name above.
+3. Have a look at the file _torus knot.obj_ and at the class ```CSolid```. Study how triangles are stored in the obj-format and in the class. The _v_ ’s indicate a single 3d-vertex position, and the _f_ ’s (faces) are indecies to 3 vertex numbers a triangle consits of (please note that the face indecies are starting with **1 and not 0**).
+4. Implement function ```CScene::add(const CSolid& solid)``` which adds a solid to the scene.
+5. Make sure that you work with Release and not Debug and disable BSP support in CMake (if it was enabled). Render the scene and write the time needed for 1 frame here:
+**Time:** .......
+
+> **Note:** Rendering may take several minutes.
+
+If your implementation works as expected you should see an image of a torus knot like this:
+
+<img src="./doc/torus knot.jpg" alt="Torus Knot" width="400px">
 
 **Hint:** The obj file-format can be dumped out from various 3d-modelers. Nevertheless, the output might differ from modeler to modeler and there are also other tokens like _vn_ for vertex normals or _vt_ for texture coordinates. Check
 [obj file format](https://www.cs.cmu.edu/~mbz/personal/graphics/obj.html) for a full description. 
 
-## Problem 3.2
-### Implementation of a kd-tree acceleration structure (Points 70)
+## Problem 2
+### Multi-threading (Points 15)
+
+
+## Problem 3
+### Implementation of a kd-tree acceleration structure (Points 20)
 So far, your own ray tracer implementation has used no acceleration structure for reducing the number of ray / primitive intersections. This was simple to implement and worked relatively good. Unfortunately, this, of course, is not practical for larger scenes as you have noticed in the last exercise with the cow. As such, you need a data structure to speed up the process of finding the first hit of a ray with the primitives. In recent years the kd-tree proved to be a useful acceleration data structure for minimizing ray-intersection tests. To implement your kd-tree proceed as follows:
 1. A new class ```CBoundingBox``` is now in the framwork which contains two ```Vec3f```’s for the ```min, max``` - fields of the bounding box.
 2. Furthermore the class has a method ```void CBoundingBox::extend(Vec3f a)```. Implement the following functionality: If _a_ is not inside a bounding box _b_, ```b.bxtend(a)``` should extend the bounding box until it also includes _a_. **Tip:** Initialize your box with an ’empty box’ (_min = +infinity, max = −infinity_).
@@ -29,3 +41,13 @@ recursion depth of 0.
 8. For traversal, use a simple, recursive algorithm, see _Ray Tracing with the BSP tree, by Kelvin Sung and Peter Shirley, in Graphics Gems III_ or read the chapter 7.2 in the [thesis of Dr. Ingo Wald](http://www.sci.utah.edu/~wald/PhD/wald_phd.pdf).
 
 Instead of optimizing too much, rather concentrate on a stable, bug-free implementation.
+
+## Problem 4
+
+## Submission
+Please submit the assignment by making a pull request.
+**Important** : Please make sure that
+- No _extra files_ are submitted (except those, which were mentioned in the assignment)
+- The changes were made _only_ in those files where you were asked to write your code
+- The Continiouse Integration system (appVeyor) can build the submitted code
+- The rendered images are also submitted in the folder "renders" 
