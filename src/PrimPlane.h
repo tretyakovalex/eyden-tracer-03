@@ -32,6 +32,7 @@ public:
 		if (dist < Epsilon || isinf(dist) || dist > ray.t) return false;
 
 		ray.t = dist;
+		ray.hit = shared_from_this();
 		return true;
 	}
 

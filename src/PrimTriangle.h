@@ -57,7 +57,7 @@ public:
 		if (ray.t <= f || f < Epsilon) return false;
 
 		ray.t = f;
-
+		ray.hit = shared_from_this();
 		return true;
 	}
 

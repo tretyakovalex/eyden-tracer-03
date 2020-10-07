@@ -16,32 +16,34 @@ namespace {
 	}
 }
 
+// ================================ AABB Class ================================
 /**
- * @brief Bounding Box class
+ * @brief Axis-Aligned Bounding Box (AABB) class
+ * @author Sergey G. Kosov, sergey.kosov@project-10.de
  */
 class CBoundingBox
 {
 public:
-	CBoundingBox(void) = default;
-	~CBoundingBox(void)= default;
+	/**
+	 * @brief Constructor
+	 * @param minPoint The minimal point defying the size of the bounding box
+	 * @param maxPoint The maximal point defying the size of the bounding box
+	 */
+	CBoundingBox(const Vec3f& minPoint = Vec3f::all(Infty), const Vec3f& maxPoint = Vec3f::all(-Infty))
+		: m_minPoint(minPoint)
+		, m_maxPoint(maxPoint)
+	{}
+	~CBoundingBox(void) = default;
 	friend std::ostream& operator<<(std::ostream& os, const CBoundingBox& box) {
 		os << box.m_minPoint << " " << box.m_maxPoint;
 		return os;
 	}
+
 	/**
-	 * @brief Resets the bounding box
-	 * @details This function resets the member variables \b m_min and \b m_max
+	 * @brief Extends the bounding box to contain point \b p
+	 * @param p A point
 	 */
-	void clear(void)
-	{
-		// --- PUT YOUR CODE HERE ---
-	}
-	
-	/**
-	 * @brief Extends the bounding box to contain point \b a
-	 * @param a A point
-	 */
-	void extend(Vec3f a)
+	void extend(const Vec3f& p)
 	{
 		// --- PUT YOUR CODE HERE ---
 	}
@@ -54,24 +56,37 @@ public:
 	{
 		// --- PUT YOUR CODE HERE ---
 	}
-	
+	/**
+	 * @brief Splits the bounding box into two parts
+	 * @details This function splits the bounding box with a plane orthogonal to the axis \b dim. Two resulting bounding boxes are initialized and returned as the result.
+	 * @param dim The dimension in which the bounding box is splitted: 0 is x, 1 is y and 2 is z
+	 * @param val The value for the defined dimension where the box is splitted. It must be in range defined my minimal and maximal points of the bounding box
+	 * @returns A pair of bounding boxes, as a matter of fact "left" and "right" bounding boxes
+	 */
+	std::pair<CBoundingBox, CBoundingBox> split(int dim, float val) const
+	{
+		// --- PUT YOUR CODE HERE ---
+		return std::make_pair<CBoundingBox, CBoundingBox>(CBoundingBox(), CBoundingBox());
+	}
 	/**
 	 * @brief Checks if the current bounding box overlaps with the argument bounding box \b box
 	 * @param box The secind bounding box to be checked with
 	 */
-	bool overlaps(const CBoundingBox& box)
+	bool overlaps(const CBoundingBox& box) const
 	{
 		// --- PUT YOUR CODE HERE ---
-		return true;
+		return false;
 	}
 	
 	/**
 	 * @brief Clips the ray with the bounding box
+	 * @details If ray \b ray does not intersect the bounding box, resulting t1 will be smaller than t0
+	 * @note This is actually a ray - aabb intersection algorithm
 	 * @param[in] ray The ray
 	 * @param[in,out] t0 The distance from ray origin at which the ray enters the bounding box
 	 * @param[in,out] t1 The distance from ray origin at which the ray leaves the bounding box
 	 */
-	void clip(const Ray& ray, float& t0, float& t1)
+	void clip(const Ray& ray, double& t0, double& t1) const
 	{
 		// --- PUT YOUR CODE HERE ---
 	}

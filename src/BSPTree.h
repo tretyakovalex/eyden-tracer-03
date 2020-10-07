@@ -12,7 +12,7 @@ namespace {
 			res.extend(pPrim->getBoundingBox());
 		return res;
 	}
-	
+
 	// Returns the best dimension index for next split
 	int MaxDim(const Vec3f& v)
 	{

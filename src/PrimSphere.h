@@ -52,6 +52,7 @@ public:
 		}
 
 		ray.t = dist;
+		ray.hit = shared_from_this();
 		return true;
 	}
 

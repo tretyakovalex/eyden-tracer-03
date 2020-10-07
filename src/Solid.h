@@ -35,7 +35,7 @@ public:
 					Vec3f v;
 					for (int i = 0; i < 3; i++) ss >> v.val[i];
 					// std::cout << "Vertex: " << v << std::endl;
-					vVertexes.push_back(v);
+					vVertexes.push_back(8 * v);
 				}
 				else if (line == "vt") {
 					Vec2f vt;

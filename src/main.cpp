@@ -47,13 +47,13 @@ Mat RenderFrame(void)
 	scene.add(std::make_shared<CLightOmni>(pointLightIntensity, lightPosition2));
 	scene.add(std::make_shared<CLightOmni>(pointLightIntensity, lightPosition3));
 
-	Mat img(resolution, CV_32FC3);	// image array
-	Ray ray;                                          				// primary ray
+	Mat img(resolution, CV_32FC3);							// image array
+	Ray ray;                                          		// primary ray
 
 	for (int y = 0; y < img.rows; y++)
 		for (int x = 0; x < img.cols; x++) {
-			scene.getActiveCamera()->InitRay(ray, x, y); // initialize ray
-			img.at<Vec3f>(y, x) = scene.RayTrace(ray); 
+			scene.getActiveCamera()->InitRay(ray, x, y);	// initialize ray
+			img.at<Vec3f>(y, x) = scene.RayTrace(ray);
 		}
 	
 	img.convertTo(img, CV_8UC3, 255);
@@ -67,6 +67,6 @@ int main(int argc, char* argv[])
 	DirectGraphicalModels::Timer::stop();
 	imshow("Image", img);
 	waitKey();
-	imwrite("torus knot.jpg", img);
+	imwrite("D:/renders/torus knot.jpg", img);
 	return 0;
 }
