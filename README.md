@@ -11,7 +11,7 @@ Until now we have only hardcoded our scene geometry in main.cpp. This is of cour
 3. Have a look at the file _torus knot.obj_ and at the class ```CSolid```. Study how triangles are stored in the obj-format and in the class. The _v_ ’s indicate a single 3d-vertex position, and the _f_ ’s (faces) are indecies to 3 vertex numbers a triangle consits of (please note that the face indecies are starting with **1 and not 0**).
 4. Implement function ```CScene::add(const CSolid& solid)``` which adds a solid to the scene.
 5. Make sure that you work with Release and not Debug and disable BSP support in CMake (if it was enabled). Render the scene and write the time needed for 1 frame here:
-**Time:** .......
+**T0:** .......
 
 > **Note:** Rendering may take several minutes.
 
@@ -24,7 +24,13 @@ If your implementation works as expected you should see an image of a torus knot
 
 ## Problem 2
 ### Multi-threading (Points 15)
-
+As we have learned from Problem 1, the increased number of the primitives in scene makes rendering with raytracing inefficient and thus useless. So, the rest of the current assignment will be dedicated to acceleration techniques. One of the most naive ideas to accelerate raytracing would be to increase the CPU power. 
+In order to use not one but all cores of CPU proceed as follows:
+1. Study the OpenCV function for parallel data processing ```parallel_for_```: [How to use the OpenCV parallel_for_ to parallelize your code](https://docs.opencv.org/master/d7/dff/tutorial_how_to_use_OpenCV_parallel_for_.html)
+2. In main.cpp file rewrite the main rendering loop (lines 53 - 57), by paralellizing the loop ```for (int y = 0; y < img.rows; y++)``` with help of ```parallel_for_``` function and enclosing the inner body into a lambda-expression. You do not need to parallelize the inner loop ```for (int x = 0; x < img.cols; x++)```.
+3. Render the scene and write the time needed for 1 frame T1 and speedup = T0 / T1 here:
+**T1:** .......
+**Speedup:** .......
 
 ## Problem 3
 ### Implementation of a kd-tree acceleration structure (Points 20)
@@ -43,6 +49,7 @@ recursion depth of 0.
 Instead of optimizing too much, rather concentrate on a stable, bug-free implementation.
 
 ## Problem 4
+
 
 ## Submission
 Please submit the assignment by making a pull request.
