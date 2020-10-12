@@ -35,19 +35,18 @@ In order to use not one but all cores of CPU proceed as follows:
 ## Problem 3
 ### Implementation of a kd-tree acceleration structure (Points 30)
 So far, your own ray tracer implementation has used no acceleration structure for reducing the number of ray / primitive intersections. This was simple to implement and worked relatively good. Unfortunately, this, of course, is not practical for larger scenes as you have noticed in the last problems with the torus knot. As such, you need a data structure to speed up the process of finding the first hit of a ray with the primitives. In recent years the kd-tree proved to be a useful acceleration data structure for minimizing ray-intersection tests. To implement your kd-tree proceed as follows:
-1. A new class ```CBoundingBox``` is now in the framwork which contains two ```Vec3f```’s for the ```m_minPoint, m_maxPoint``` - fields of the bounding box.
-2. Furthermore the class has 2 methods ```void CBoundingBox::extend(const Vec3f& p)``` and ```void extend(const CBoundingBox& box)```. Implement the following functionality: 
+1. Study n new class ```CBoundingBox``` is now in the framwork which contains two ```Vec3f```’s for the ```m_minPoint, m_maxPoint``` - fields of the bounding box. Furthermore the class has 2 methods ```void CBoundingBox::extend(const Vec3f& p)``` and ```void extend(const CBoundingBox& box)```. Implement the following functionality: 
     1. If point _p_ is not inside a bounding box _b_, ```b.bxtend(p)``` should extend the bounding box until it also includes _p_. 
     2. If box _box_ is not fully inside a bounding box _b_, ```b.bxtend(box)``` should extend the bounding box until it also includes _box_. <br>
     **Tip:** The box is initialized with an ’empty box’ (_m_minPoint = +infinity, m_maxPoint = −infinity_).
-3. The method ```virtual CBoundingBox getBoundingBox(void) const = 0``` has to be implemented in every class derived from ```IPrim```.
-4. Most acceleration structures require to clip the ray with the bounding box of the scene, as the origin might otherwise be outside the scene bounds. For clipping a ray with the bounding box of a scene, you can best use the slabs algorithm and implement it in ```void CBoundingBox::clip(const Ray& ray, double& t0, double& t1)```.
-5. You will need a method to decide whether a primitive is contained in a given bounding box or not. For this purpose the method ```bool CBoundingBox::overlaps(const CBoundingBox& box) const``` exists. Implement theis method. For simplicity, just check the primitives bounding box for overlap with the box.
-6. Implement the method ```CBoundingBox calcBoundingBox(const std::vector<ptr_prim_t>& vpPrims)```, which should calculate the bounding box of the scene, containing all the primitives given by _vpPrims_.<br>
+2. The method ```virtual CBoundingBox getBoundingBox(void) const = 0``` has to be implemented in every class derived from ```IPrim```.
+3. Most acceleration structures require to clip the ray with the bounding box of the scene, as the origin might otherwise be outside the scene bounds. For clipping a ray with the bounding box of a scene, you can best use the slabs algorithm and implement it in ```void CBoundingBox::clip(const Ray& ray, double& t0, double& t1)```.
+4. You will need a method to decide whether a primitive is contained in a given bounding box or not. For this purpose the method ```bool CBoundingBox::overlaps(const CBoundingBox& box) const``` exists. Implement theis method. For simplicity, just check the primitives bounding box for overlap with the box.
+5. Implement the method ```CBoundingBox calcBoundingBox(const std::vector<ptr_prim_t>& vpPrims)```, which should calculate the bounding box of the scene, containing all the primitives given by _vpPrims_.<br>
 **Hint:** Use the ```void extend(const CBoundingBox& box)``` function.
-7. Implement the method ```std::shared_ptr<CBSPNode> build(const CBoundingBox& box, const std::vector<ptr_prim_t>& vpPrims, size_t depth)``` of the class ```CBSPTree```. As soon as you have reached a maximum depth (_e.g._ 20), or you have less then a minimum number of primitives (_e.g._ 3 or 4), stop subdividing and generate a leaf node. Otherweise, split your bounding box in the middle (in the maximum dimension), sort your current primitives into two vector left and right, and recursively call BuildTree with the respective bounding boxes and vector for left and right. Start subdivision with a list of all primitives, the total scene bounds, and an initial recursion depth of 0.<br>
-8. For traversal, use a simple, recursive algorithm, described in the lectures. For more information please read the chapter 7.2 in the [thesis of Dr. Ingo Wald](http://www.sci.utah.edu/~wald/PhD/wald_phd.pdf).
-9. Render the scene and write the time needed for 1 frame T2 and speedup = T0 / T2 below:<br>
+6. Implement the method ```std::shared_ptr<CBSPNode> build(const CBoundingBox& box, const std::vector<ptr_prim_t>& vpPrims, size_t depth)``` of the class ```CBSPTree```. Use the ideas presented at the lecture. As soon as you have reached a maximum depth (_e.g._ 20), or you have less then a minimum number of primitives (_e.g._ 3 or 4), stop subdividing and generate a leaf node. Otherweise, split your bounding box in the middle (in the maximum dimension), sort your current primitives into two vector left and right, and recursively call BuildTree with the respective bounding boxes and vector for left and right. Start subdivision with a list of all primitives, the total scene bounds, and an initial recursion depth of 0.<br>
+7. For traversal, use a simple, recursive algorithm, described in the lectures. For more information please read the chapter 7.2 in the [thesis of Dr. Ingo Wald](http://www.sci.utah.edu/~wald/PhD/wald_phd.pdf).
+8. Render the scene and write the time needed for 1 frame T2 and speedup = T0 / T2 below:<br>
 **T2:** .......<br>
 **Speedup:** .......
 
@@ -57,6 +56,13 @@ Instead of optimizing too much, rather concentrate on a stable, bug-free impleme
 
 ## Problem 4
 ### Optimization of the KD-Tree build algorithm (Points 50)
+The performace of ray traversal in a kd-tree highly depends on the structure of a particular tree. For the same scene it is possible to build a kd-tree in multiple ways. For this problem we will research the tree building algorithm and try to ptimize it.
+The core idea of the kd-tree building algorithm is splitting a current bounding box into 2 leafs. For that purpose on the lectures we have considered splitting dimension _splitDim_ to be the maximum dimension of the bounding box and splitting value _splitVal_ to be the center of of the box in that dimension.
+1. Elaborate and implement an idea in ```ptr_bspnode_t CBSPTree::build(const CBoundingBox& box, const std::vector<ptr_prim_t>& vpPrims, size_t depth)``` for better choice of the _splitVal_ parameter. For example, define _splitVal_ in such a way, that the number of primitives in the current bounding box will be split by half. To check your implememntation you may chech the length of the left and right vectors with primitives after the split.
+2. Elaborate and implement an idea in ```ptr_bspnode_t CBSPTree::build(const CBoundingBox& box, const std::vector<ptr_prim_t>& vpPrims, size_t depth)``` for better choice of the _splitDim_ parameter. For example, define _splitVal_ as a function of max dimension _and_ depth of the recursion.
+3. Experiment with your ideas. Chose the one, which gives the fastest result and render the scene and write the time needed for 1 frame T3 and speedup = T0 / T3 below:<br>
+**T3:** .......<br>
+**Speedup:** .......
 
 ## Submission
 Please submit the assignment by making a pull request.
