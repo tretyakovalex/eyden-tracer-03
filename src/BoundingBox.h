@@ -4,18 +4,6 @@
 
 struct Ray;
 
-namespace {
-	inline Vec3f Min3f(const Vec3f a, const Vec3f b)
-	{
-		return Vec3f(MIN(a.val[0], b.val[0]), MIN(a.val[1], b.val[1]), MIN(a.val[2], b.val[2]));
-	}
-
-	inline Vec3f Max3f(const Vec3f a, const Vec3f b)
-	{
-		return Vec3f(MAX(a.val[0], b.val[0]), MAX(a.val[1], b.val[1]), MAX(a.val[2], b.val[2]));
-	}
-}
-
 // ================================ AABB Class ================================
 /**
  * @brief Axis-Aligned Bounding Box (AABB) class
@@ -43,19 +31,13 @@ public:
 	 * @brief Extends the bounding box to contain point \b p
 	 * @param p A point
 	 */
-	void extend(const Vec3f& p)
-	{
-		// --- PUT YOUR CODE HERE ---
-	}
+	void extend(const Vec3f& p);
 	
 	/**
 	 * @brief Extends the bounding box to contain bounding box \b box
 	 * @param box The second bounding box
 	 */
-	void extend(const CBoundingBox& box)
-	{
-		// --- PUT YOUR CODE HERE ---
-	}
+	void extend(const CBoundingBox& box);
 	/**
 	 * @brief Splits the bounding box into two parts
 	 * @details This function splits the bounding box with a plane orthogonal to the axis \b dim. Two resulting bounding boxes are initialized and returned as the result.
@@ -63,20 +45,12 @@ public:
 	 * @param val The value for the defined dimension where the box is splitted. It must be in range defined my minimal and maximal points of the bounding box
 	 * @returns A pair of bounding boxes, as a matter of fact "left" and "right" bounding boxes
 	 */
-	std::pair<CBoundingBox, CBoundingBox> split(int dim, float val) const
-	{
-		// --- PUT YOUR CODE HERE ---
-		return std::make_pair<CBoundingBox, CBoundingBox>(CBoundingBox(), CBoundingBox());
-	}
+	std::pair<CBoundingBox, CBoundingBox> split(int dim, float val) const;
 	/**
 	 * @brief Checks if the current bounding box overlaps with the argument bounding box \b box
 	 * @param box The secind bounding box to be checked with
 	 */
-	bool overlaps(const CBoundingBox& box) const
-	{
-		// --- PUT YOUR CODE HERE ---
-		return false;
-	}
+	bool overlaps(const CBoundingBox& box) const;
 	
 	/**
 	 * @brief Clips the ray with the bounding box
@@ -86,13 +60,19 @@ public:
 	 * @param[in,out] t0 The distance from ray origin at which the ray enters the bounding box
 	 * @param[in,out] t1 The distance from ray origin at which the ray leaves the bounding box
 	 */
-	void clip(const Ray& ray, double& t0, double& t1) const
-	{
-		// --- PUT YOUR CODE HERE ---
-	}
+	void clip(const Ray& ray, double& t0, double& t1) const;
+	/**
+	 * @brief Returns the minimal point defying the size of the bounding box
+	 * @returns The minimal point defying the size of the bounding box
+	 */
+	Vec3f getMinPoint(void) const { return m_minPoint; }
+	/**
+	 * @brief Returns the maximal point defying the size of the bounding box
+	 * @returns The maximal point defying the size of the bounding box
+	 */
+	Vec3f getMaxPoint(void) const { return m_maxPoint; }
 	
-	
-public:
+private:
 	Vec3f m_minPoint;	///< The minimal point defying the size of the bounding box
 	Vec3f m_maxPoint;	///< The maximal point defying the size of the bounding box
 };

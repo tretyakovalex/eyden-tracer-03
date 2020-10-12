@@ -18,7 +18,7 @@ source_group("Source Files\\Solids" FILES "src/Solid.h")
 source_group("Source Files\\Shaders" FILES "src/IShader.h" "src/ShaderFlat.h" "src/ShaderEyelight.h" "src/ShaderPhong.h")
 source_group("Source Files\\Scene" FILES "src/Scene.h")
 source_group("Source Files\\utilities" FILES "src/ray.h" "src/timer.h")
-source_group("Source Files\\utilities\\BSP Tree" FILES "src/BSPNode.h" "src/BSPTree.h" "src/BoundingBox.h")
+source_group("Source Files\\utilities\\BSP Tree" FILES "src/BSPNode.h" "src/BSPTree.h" "src/BoundingBox.h" "src/BoundingBox.cpp")
 
 # OpenCV package
 find_package(OpenCV 4.0 REQUIRED core highgui imgproc imgcodecs PATHS "$ENV{OPENCVDIR}/build")
