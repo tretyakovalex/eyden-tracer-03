@@ -38,15 +38,20 @@ So far, your own ray tracer implementation has used no acceleration structure fo
 1. Study n new class ```CBoundingBox``` is now in the framwork which contains two ```Vec3f```’s for the ```m_minPoint, m_maxPoint``` - fields of the bounding box. Furthermore the class has 2 methods ```void CBoundingBox::extend(const Vec3f& p)``` and ```void extend(const CBoundingBox& box)```. Enable BSP support in CMake and implement the following functionality: 
     1. If point _p_ is not inside a bounding box _b_, ```b.bxtend(p)``` should extend the bounding box until it also includes _p_. 
     2. If box _box_ is not fully inside a bounding box _b_, ```b.bxtend(box)``` should extend the bounding box until it also includes _box_. <br>
-    **Tip:** The box is initialized with an ’empty box’ (_m_minPoint = +infinity, m_maxPoint = −infinity_).
+    **Tip:** The box is initialized with an ’empty box’ (_m_minPoint = +infinity, m_maxPoint = −infinity_).<br>
+    **Hint:** You may make use of functons _Min3f_ and _Max3f_ defined in the BoundingBox.cpp file.
 2. The method ```virtual CBoundingBox getBoundingBox(void) const = 0``` has to be implemented in every class derived from ```IPrim```.
 3. Most acceleration structures require to clip the ray with the bounding box of the scene, as the origin might otherwise be outside the scene bounds. For clipping a ray with the bounding box of a scene, you can best use the slabs algorithm and implement it in ```void CBoundingBox::clip(const Ray& ray, double& t0, double& t1)```.
 4. You will need a method to decide whether a primitive is contained in a given bounding box or not. For this purpose the method ```bool CBoundingBox::overlaps(const CBoundingBox& box) const``` exists. Implement theis method. For simplicity, just check the primitives bounding box for overlap with the box.
-5. Implement the method ```CBoundingBox calcBoundingBox(const std::vector<ptr_prim_t>& vpPrims)```, which should calculate the bounding box of the scene, containing all the primitives given by _vpPrims_.<br>
-**Hint:** Use the ```void extend(const CBoundingBox& box)``` function.
+5. Implement the method ```CBoundingBox calcBoundingBox(const std::vector<ptr_prim_t>& vpPrims)``` in BSPTree.h file, which should calculate the bounding box of the scene, containing all the primitives given by _vpPrims_.<br>
+**Hint:** Use the ```void extend(const CBoundingBox& box)``` function.<br>
+If everything so far was implemented correctly, the Scene bounds will be: [-6, 0, -5.6] [4.45, 8, 5.6] (approximately)
+6. Implement the method ```std::pair<CBoundingBox, CBoundingBox> CBoundingBox::split(int dim, float val) const``` which splits curent bounding box into two pieces. The split should be done with a hyper-plane orthogonal to the axis defined by argument _dim_ and in the positon defined by argument _val_.
+7. Implement the method ```std::shared_ptr<CBSPNode> build(const CBoundingBox& box, const std::vector<ptr_prim_t>& vpPrims, size_t depth)``` of the class ```CBSPTree```. Use the ideas presented at the lecture. As soon as you have reached a maximum depth (_e.g._ 20), or you have less then a minimum number of primitives (_e.g._ 3 or 4), stop subdividing and generate a leaf node. Otherweise, split your bounding box in the middle (in the maximum dimension), sort your current primitives into two vector left and right, and recursively call BuildTree with the respective bounding boxes and vector for left and right. Start subdivision with a list of all primitives, the total scene bounds, and an initial recursion depth of 0.<br>
+8. For traversal, use a simple, recursive algorithm, described in the lectures. Please implement this algorithm in methods ```bool CBSPTree::intersect(Ray& ray)``` and ```bool CBSPNode::intersect(Ray& ray, double t0, double t1)```
+For more information please read the chapter 7.2 in the [thesis of Dr. Ingo Wald](http://www.sci.utah.edu/~wald/PhD/wald_phd.pdf).
 6. Implement the method ```std::shared_ptr<CBSPNode> build(const CBoundingBox& box, const std::vector<ptr_prim_t>& vpPrims, size_t depth)``` of the class ```CBSPTree```. Use the ideas presented at the lecture. As soon as you have reached a maximum depth (_e.g._ 20), or you have less then a minimum number of primitives (_e.g._ 3 or 4), stop subdividing and generate a leaf node. Otherweise, split your bounding box in the middle (in the maximum dimension), sort your current primitives into two vector left and right, and recursively call BuildTree with the respective bounding boxes and vector for left and right. Start subdivision with a list of all primitives, the total scene bounds, and an initial recursion depth of 0.<br>
-7. For traversal, use a simple, recursive algorithm, described in the lectures. For more information please read the chapter 7.2 in the [thesis of Dr. Ingo Wald](http://www.sci.utah.edu/~wald/PhD/wald_phd.pdf).
-8. Render the scene and write the time needed for 1 frame T2 and speedup = T0 / T2 below:<br>
+9. Render the scene and write the time needed for 1 frame T2 and speedup = T0 / T2 below:<br>
 **T2:** .......<br>
 **Speedup:** .......
 
