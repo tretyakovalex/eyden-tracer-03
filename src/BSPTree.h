@@ -2,14 +2,14 @@
 
 #include "BSPNode.h"
 #include "BoundingBox.h"
+#include "IPrim.h"
 
 namespace {
 	// Calculates and return the bounding box, containing the whole scene
 	CBoundingBox calcBoundingBox(const std::vector<ptr_prim_t>& vpPrims)
 	{
 		CBoundingBox res;
-		for (auto pPrim : vpPrims)
-			res.extend(pPrim->getBoundingBox());
+		// --- PUT YOUR CODE HERE ---
 		return res;
 	}
 
@@ -67,7 +67,7 @@ private:
 	 * @param vpPrims The vector of pointers to the primitives included in the bounding box \b box
 	 * @param depth The distance from the root node of the tree
 	 */
-	std::shared_ptr<CBSPNode> build(const CBoundingBox& box, const std::vector<ptr_prim_t>& vpPrims, size_t depth)
+	ptr_bspnode_t build(const CBoundingBox& box, const std::vector<ptr_prim_t>& vpPrims, size_t depth)
 	{
 		float splitVal;
 		int splitDim;
