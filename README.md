@@ -38,7 +38,8 @@ So far, your own ray tracer implementation has used no acceleration structure fo
 1. Study n new class ```CBoundingBox``` is now in the framwork which contains two ```Vec3f```’s for the ```m_minPoint, m_maxPoint``` - fields of the bounding box. Furthermore the class has 2 methods ```void CBoundingBox::extend(const Vec3f& p)``` and ```void extend(const CBoundingBox& box)```. Enable BSP support in CMake and implement the following functionality: 
     1. If point _p_ is not inside a bounding box _b_, ```b.bxtend(p)``` should extend the bounding box until it also includes _p_. 
     2. If box _box_ is not fully inside a bounding box _b_, ```b.bxtend(box)``` should extend the bounding box until it also includes _box_. <br>
-    **Tip:** The box is initialized with an ’empty box’ (_m_minPoint = +infinity, m_maxPoint = −infinity_).
+    **Tip:** The box is initialized with an ’empty box’ (_m_minPoint = +infinity, m_maxPoint = −infinity_).<br>
+    **Hint:** You may make use of functons _Min3f_ and _Max3f_ defined in the BoundingBox.cpp file.
 2. The method ```virtual CBoundingBox getBoundingBox(void) const = 0``` has to be implemented in every class derived from ```IPrim```.
 3. Most acceleration structures require to clip the ray with the bounding box of the scene, as the origin might otherwise be outside the scene bounds. For clipping a ray with the bounding box of a scene, you can best use the slabs algorithm and implement it in ```void CBoundingBox::clip(const Ray& ray, double& t0, double& t1)```.
 4. You will need a method to decide whether a primitive is contained in a given bounding box or not. For this purpose the method ```bool CBoundingBox::overlaps(const CBoundingBox& box) const``` exists. Implement theis method. For simplicity, just check the primitives bounding box for overlap with the box.
