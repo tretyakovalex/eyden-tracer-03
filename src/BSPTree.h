@@ -11,6 +11,10 @@ namespace {
 	{
 		CBoundingBox res;
 		// --- PUT YOUR CODE HERE ---
+		for(auto pPrim : vpPrims){
+            res.extend(pPrim->getBoundingBox());
+        }
+    return res;
 	}
 
 	// Returns the best dimension index for next split
@@ -31,7 +35,7 @@ public:
 	CBSPTree(const CBSPTree&) = delete;
 	~CBSPTree(void) = default;
 	const CBSPTree& operator=(const CBSPTree&) = delete;
-	
+
 	/**
 	 * @brief Builds the BSP tree for the primitives provided via \b vpPrims
 	 * @param vpPrims The vector of pointers to the primitives in the scene
@@ -55,7 +59,15 @@ public:
 	bool intersect(Ray& ray) const
 	{
 		// --- PUT YOUR CODE HERE ---
-		return false;
+		double t0 = 0;
+    double t1 = ray.t;
+
+    m_treeBoundingBox.clip(ray, t0, t1);
+
+    if(t1 < t0)
+        return false;
+
+    return m_root->intersect(ray, t0 ,t1);
 	}
 
 
@@ -98,11 +110,10 @@ private:
 		return std::make_shared<CBSPNode>(splitDim, splitVal, pLeft, pRight);
 	}
 
-	
+
 private:
 	CBoundingBox 	m_treeBoundingBox;		///<
 	size_t			m_maxDepth;				///< The maximum allowed depth of the tree
 	size_t			m_minPrimitives;		///< The minimum number of primitives in a leaf-node
 	ptr_bspnode_t   m_root = nullptr;		///<
 };
-	

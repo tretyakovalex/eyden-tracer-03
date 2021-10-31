@@ -68,7 +68,10 @@ public:
 	{
 		CBoundingBox res;
 		// --- PUT YOUR CODE HERE ---
-		return res;
+		Vec3f minPoint = m_origin - Vec3f::all(m_radius);
+    Vec3f maxPoint = m_origin + Vec3f::all(m_radius);
+
+		return CBoundingBox(minPoint, maxPoint);
 	}
 
 

@@ -48,10 +48,28 @@ public:
 	{
 		if (isLeaf()) {
 			// --- PUT YOUR CODE HERE ---
-			return false;
+			for(auto& pPrim : m_vpPrims)
+                pPrim->intersect(ray);
+			return (ray.hit && ray.t < t1 + Epsilon);
 		} else {
 			// --- PUT YOUR CODE HERE ---
-			return false;
+			double d = (m_splitVal - ray.org[m_splitDim]) / ray.dir[m_splitDim];
+
+      auto frontNode = (ray.dir[m_splitDim] < 0) ? Right() : Left();
+      auto backNode = (ray.dir[m_splitDim] < 0) ? Left() : Right();
+
+      if(d <= t0){
+          return backNode->intersect(ray, t0, t1);
+      }
+      else if(d >= t1){
+          return frontNode->intersect(ray, t0, t1);
+      }
+      else{
+          if(frontNode->intersect(ray, t0, d)){
+						return true;
+					}
+          return backNode->intersect(ray, d, t1);
+      }
 		}
 	}
 
@@ -66,7 +84,7 @@ public:
 	 */
 	ptr_bspnode_t Right(void) const { return m_pRight; }
 
-	
+
 private:
 	/**
 	 * @brief Genereal private constructor
@@ -91,8 +109,8 @@ private:
 	 * @retval false if the node is a branch-node
 	 */
 	bool isLeaf(void) const { return (!m_pLeft && !m_pRight); }
-	
-	
+
+
 private:
 	std::vector<ptr_prim_t>	m_vpPrims;		///< The vector of pointers to the primitives included in the leaf node
 	int 					m_splitDim;		///< The splitting dimension
@@ -100,4 +118,3 @@ private:
 	ptr_bspnode_t 	        m_pLeft;		///< Pointer to the left sub-tree
 	ptr_bspnode_t 	        m_pRight;		///< Pointer to the right sub-tree
 };
-

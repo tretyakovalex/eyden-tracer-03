@@ -24,7 +24,7 @@ public:
 	 */
 	CScene(Vec3f bgColor = RGB(0, 0, 0))
 		: m_bgColor(bgColor)
-#ifdef ENABLE_BSP	
+#ifdef ENABLE_BSP
 		, m_pBSPTree(new CBSPTree())
 #endif
 	{}
@@ -62,6 +62,9 @@ public:
 	void add(const CSolid& solid)
 	{
 		// --- PUT YOUR CODE HERE ---
+		for(const auto& p : solid.getPrims()){
+			add(p);
+		}
 	}
 	/**
 	 * @brief (Re-) Build the BSP tree for the current geometry present in scene
@@ -75,9 +78,9 @@ public:
 	void buildAccelStructure(size_t maxDepth, size_t minPrimitives) {
 #ifdef ENABLE_BSP
 		m_pBSPTree->build(m_vpPrims, maxDepth, minPrimitives);
-#else 
+#else
 		printf("Warning: BSP support is not enabled!\n");
-#endif		
+#endif
 	}
 	/**
 	 * @brief Returns the container with all scene light source objects
@@ -139,7 +142,7 @@ private:
 	std::vector<ptr_light_t>	m_vpLights;				///< lights
 	std::vector<ptr_camera_t>	m_vpCameras;			///< Cameras
 	size_t						m_activeCamera = 0;	//< The index of the active camera
-#ifdef ENABLE_BSP		
+#ifdef ENABLE_BSP
 	std::unique_ptr<CBSPTree>	m_pBSPTree = nullptr;	///< Pointer to the acceleration structure
 #endif
 };
